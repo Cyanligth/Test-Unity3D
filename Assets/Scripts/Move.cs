@@ -7,6 +7,8 @@ public class Move : MonoBehaviour
 {
     float h;
     float v;
+    public float moveSpeed;
+    public float flyPower;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,11 +25,11 @@ public class Move : MonoBehaviour
         dir = transform.TransformDirection(dir);
         Rigidbody rb = GetComponent<Rigidbody>();
         if (Input.GetKey(KeyCode.Space))
-            rb.AddForce(Vector3.up * 3);
+            rb.AddForce(Vector3.up * flyPower);
         if (Input.GetKey(KeyCode.W))
-            rb.AddForce(dir *3);
+            rb.AddForce(dir *moveSpeed);
         if (Input.GetKey(KeyCode.S))
-            rb.AddForce(dir*3);
+            rb.AddForce(dir*moveSpeed);
         if (Input.GetKey(KeyCode.D))
             transform.Rotate(new Vector3(0, 50f * Time.deltaTime, 0));
         if (Input.GetKey(KeyCode.A))
