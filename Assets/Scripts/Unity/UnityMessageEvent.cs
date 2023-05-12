@@ -21,6 +21,8 @@ public class UnityMasageEvent : MonoBehaviour
         //		  (게임상황과 무관한 초기화 작업)
         // ex) 데이터 초기화, 컴포넌트 연결
         Debug.Log("Awake");
+
+        // 프로그램이 켜질때 일단 이거는 무조건 전부 실행
     }
 
     private void OnEnable()
@@ -29,6 +31,8 @@ public class UnityMasageEvent : MonoBehaviour
 
         // 역할 : 스크립트가 활성화 되었을 때 작업 진행
         Debug.Log("OnEnable");
+
+        // 스크립크가 활성화되는 순간 호출
     }
 
     private void Start()
@@ -40,6 +44,8 @@ public class UnityMasageEvent : MonoBehaviour
         //		  (게임상황이 영향을 줄 수 있는 작업)
         // ex) 몬스터의 플레이어 타겟선정
         Debug.Log("Start");
+
+        // 해당 스크립트의 첫 업데이트가 시작되기 직전에 호출
     }
 
     private void Update()
@@ -48,6 +54,8 @@ public class UnityMasageEvent : MonoBehaviour
 
         // 역할 : 핵심 게임 로직 구현
         Debug.Log("Update");
+
+        // 메 프레임마다 작동
     }
 
     private void LateUpdate()
@@ -57,6 +65,8 @@ public class UnityMasageEvent : MonoBehaviour
         // 역할 : 게임프레임의 진행 결과가 필요한 동작이 있는 기능 구현
         // ex) 플레이어의 위치가 결정된 후에 카메라의 위치 설정
         Debug.Log("LateUpdate");
+
+        // 한쪽의 업데이트에서 먼저 들어오더라도 같은 프레임 안이라면 동시로 판정하기 위한 그런것.
     }
 
     private void FixedUpdate()
@@ -68,6 +78,8 @@ public class UnityMasageEvent : MonoBehaviour
         // 역할 : 성능과 프레임 드랍에 영향을 받지 않아야 하는 작업
         // ex) 물리적 처리
         Debug.Log("FixedUpdate");
+
+        // 프레임과 별개로 자기만의 시간으로 호출되는 애
     }
 
     private void OnDisable()
@@ -76,6 +88,8 @@ public class UnityMasageEvent : MonoBehaviour
 
         // 역할 : 스크립트가 비활성화 되었을 때 작업 진행
         Debug.Log("OnDisable");
+
+        // 스크립트가 비활성화되는 순간 이거 호출
     }
 
     private void OnDestroy()
@@ -84,5 +98,7 @@ public class UnityMasageEvent : MonoBehaviour
 
         // 역할 : 스크립트의 마무리 진행
         Debug.Log("OnDestory");
+
+        // 삭제될떄 호출
     }
 }
