@@ -1,0 +1,74 @@
+{
+    "name": "Camera",
+    "maps": [
+        {
+            "name": "Camera",
+            "id": "aa20033e-aa23-497d-ad37-f8907cd42c14",
+            "actions": [
+                {
+                    "name": "Zoom",
+                    "type": "Button",
+                    "id": "72a4a873-506c-4f42-9cc1-cfafcd048a4e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PlayerCam",
+                    "type": "Button",
+                    "id": "a0088c96-3648-4477-b99a-b056244c1587",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ViewCam",
+                    "type": "Button",
+                    "id": "b3fcb2df-2fca-41fa-8221-4b627cf9a89a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "2a7c9f9d-f9e3-4eed-90c0-7a48f4e15d01",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9d1dd047-b004-4878-8697-2615acceb341",
+                    "path": "<Keyboard>/p",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PlayerCam",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7bf2c63b-eb19-4751-8aa2-85a0e1217643",
+                    "path": "<Keyboard>/o",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ViewCam",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

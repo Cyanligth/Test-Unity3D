@@ -22,11 +22,28 @@ public class MovingTank : MonoBehaviour
     [SerializeField] private Transform bulletPoint;
     [SerializeField] private float bulletColldown;
     [SerializeField] private GameObject explosion;
+    [SerializeField] private int maxBullet;
+    [SerializeField] private int curBullet;
+    [SerializeField] private int reloadCool;
+    private bool reloading;
+
+    [SerializeField] private AudioSource engineDrive;
+    [SerializeField] private AudioSource engineIdle;
+    [SerializeField] private AudioSource fireSound;
+    [SerializeField] private AudioSource reloadSound;
+    [SerializeField] private AudioSource bgm;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         bulletCount = 0;
+        curBullet = maxBullet;
+        reloading = false;
+        engineIdle.enabled = true;
+        engineDrive.enabled = false;
+        fireSound.enabled = false;
+        reloadSound.enabled = false;
+        bgm.enabled = true;
     }
     private void Update()
     {
@@ -39,6 +56,16 @@ public class MovingTank : MonoBehaviour
     private void Move()
     {
         transform.Translate(moveDir * moveSpeed * Time.deltaTime, Space.Self);
+        if(moveDir.z != 0)
+        {
+            engineIdle.enabled = false;
+            engineDrive.enabled = true;
+        }
+        else
+        {
+            engineIdle.enabled = true;
+            engineDrive.enabled = false;
+        }
     }
 
     private void OnMove(InputValue value)
@@ -78,11 +105,32 @@ public class MovingTank : MonoBehaviour
         turret.transform.Rotate(Vector3.up, turretRot.x * rotateSpeed * Time.deltaTime);
     }
 
+    IEnumerator Reload()
+    {
+        reloading = true;
+        Instantiate(reloadSound);
+        yield return new WaitForSeconds(reloadCool);
+        curBullet = maxBullet;
+        Destroy(reloadSound);
+        reloading = false;
+    }
+    private void OnReload(InputValue input)
+    {
+        if(!reloading)
+        {
+            StartCoroutine(Reload());
+        }
+    }
 
     private int bulletCount;
     private void OnFire(InputValue input)
     {
-        if (bulletCount == 0)
+        if(curBullet <= 0 && !reloading)
+        {
+            StartCoroutine(Reload());
+            return;
+        }
+        if (bulletCount == 0 && curBullet > 0 && !reloading)
         {
             Fire();
             StartCoroutine(BulletCount());
@@ -97,17 +145,30 @@ public class MovingTank : MonoBehaviour
     private void Fire()
     {
         Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
+        Instantiate(fireSound);
         // Instantiate(explosion, bulletPoint.position, bulletPoint.rotation);
         bulletCount++;
+        curBullet--;
     }
 
     private Coroutine cooldown;
     
-    IEnumerator BullteCooldown()
+    IEnumerator RapidBullet()
     {
         while(true)
         {
+            if (curBullet <= 0 && !reloading)
+            {
+                StartCoroutine(Reload());
+                break;
+            }
+            else if(curBullet <= 0 && reloading)
+            {
+                break;
+            }
             Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
+            Instantiate(fireSound);
+            curBullet--;
             yield return new WaitForSeconds(bulletColldown);
         }
     }
@@ -116,9 +177,9 @@ public class MovingTank : MonoBehaviour
     {
         if(input.isPressed)
         {
-            cooldown = StartCoroutine(BullteCooldown());
+            cooldown = StartCoroutine(RapidBullet());
         }
-        else
+        else if(curBullet > 0)
         {
             StopCoroutine(cooldown);
         }
