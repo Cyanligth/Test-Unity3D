@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        explosionSound.enabled = true;
+        explosionSound.enabled = false;
     }
 
     private void Start()
@@ -22,12 +22,17 @@ public class Bullet : MonoBehaviour
         rb.velocity = transform.forward * bulletSpeed;
         Destroy(gameObject, 5f);
     }
-
+    IEnumerator soundDelete()
+    {
+        yield return new WaitForSeconds(0.2f);
+        explosionSound.enabled = false;
+        Destroy(gameObject);
+    }
     private void OnCollisionEnter(Collision collision)
     {
         Destroy(rb);
-        explosionSound.Play();
+        explosionSound.enabled = true;
         Instantiate(explosion, transform.position, transform.rotation);
-        Destroy(gameObject);
+        StartCoroutine(soundDelete());
     }
 }

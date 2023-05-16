@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MovingTank : MonoBehaviour
-{
+{   // 실수로 커밋해서 수정할것을 만들기 위한 의미없는 텍스트
     private Vector3 moveDir;
     private Vector3 rotate;
     private Vector3 turretRot;
@@ -21,7 +21,6 @@ public class MovingTank : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletPoint;
     [SerializeField] private float bulletColldown;
-    [SerializeField] private GameObject explosion;
     [SerializeField] private int maxBullet;
     [SerializeField] private int curBullet;
     [SerializeField] private int reloadCool;
@@ -31,7 +30,6 @@ public class MovingTank : MonoBehaviour
     [SerializeField] private AudioSource engineIdle;
     [SerializeField] private AudioSource fireSound;
     [SerializeField] private AudioSource reloadSound;
-    [SerializeField] private AudioSource bgm;
 
     private void Awake()
     {
@@ -43,7 +41,6 @@ public class MovingTank : MonoBehaviour
         engineDrive.enabled = false;
         fireSound.enabled = false;
         reloadSound.enabled = false;
-        bgm.enabled = true;
     }
     private void Update()
     {
@@ -56,7 +53,7 @@ public class MovingTank : MonoBehaviour
     private void Move()
     {
         transform.Translate(moveDir * moveSpeed * Time.deltaTime, Space.Self);
-        if(moveDir.z != 0)
+        if(moveDir.z != 0 || rotate.x != 0)
         {
             engineIdle.enabled = false;
             engineDrive.enabled = true;
@@ -108,10 +105,10 @@ public class MovingTank : MonoBehaviour
     IEnumerator Reload()
     {
         reloading = true;
-        Instantiate(reloadSound);
+        reloadSound.enabled = true;
         yield return new WaitForSeconds(reloadCool);
         curBullet = maxBullet;
-        Destroy(reloadSound);
+        reloadSound.enabled = false;
         reloading = false;
     }
     private void OnReload(InputValue input)
@@ -140,16 +137,18 @@ public class MovingTank : MonoBehaviour
     {
         yield return new WaitForSeconds(bulletColldown);
         bulletCount--;
+        fireSound.enabled = false;
     }
 
     private void Fire()
     {
         Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
-        Instantiate(fireSound);
+        fireSound.enabled = true;
         // Instantiate(explosion, bulletPoint.position, bulletPoint.rotation);
         bulletCount++;
         curBullet--;
     }
+
 
     private Coroutine cooldown;
     
@@ -167,9 +166,10 @@ public class MovingTank : MonoBehaviour
                 break;
             }
             Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
-            Instantiate(fireSound);
+            fireSound.enabled = true;
             curBullet--;
             yield return new WaitForSeconds(bulletColldown);
+            fireSound.enabled = false;
         }
     }
 
