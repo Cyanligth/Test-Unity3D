@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: ac9270bbb2f628741bbb590cf05e9165
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - turret: {instanceID: 0}
+  - bulletPrefab: {instanceID: 0}
+  - bulletPoint: {instanceID: 0}
+  - engineDrive: {instanceID: 0}
+  - engineIdle: {instanceID: 0}
+  - fireSound: {instanceID: 0}
+  - reloadSound: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

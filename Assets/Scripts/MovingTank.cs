@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class MovingTank : MonoBehaviour
-{   // 실수로 커밋해서 수정할것을 만들기 위한 의미없는 텍스트
+{   
     private Vector3 moveDir;
     private Vector3 rotate;
     private Vector3 turretRot;
@@ -31,9 +31,12 @@ public class MovingTank : MonoBehaviour
     [SerializeField] private AudioSource fireSound;
     [SerializeField] private AudioSource reloadSound;
 
+    private Animator animator;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
         bulletCount = 0;
         curBullet = maxBullet;
         reloading = false;
@@ -118,7 +121,10 @@ public class MovingTank : MonoBehaviour
             StartCoroutine(Reload());
         }
     }
-
+    public void Shot()
+    {
+        Fire();
+    }
     private int bulletCount;
     private void OnFire(InputValue input)
     {
@@ -130,7 +136,6 @@ public class MovingTank : MonoBehaviour
         if (bulletCount == 0 && curBullet > 0 && !reloading)
         {
             Fire();
-            StartCoroutine(BulletCount());
         }
     }
     IEnumerator BulletCount()
@@ -140,13 +145,17 @@ public class MovingTank : MonoBehaviour
         fireSound.enabled = false;
     }
 
-    private void Fire()
+    public void Fire()
     {
-        Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
-        fireSound.enabled = true;
-        // Instantiate(explosion, bulletPoint.position, bulletPoint.rotation);
-        bulletCount++;
-        curBullet--;
+        if (bulletCount == 0 && curBullet > 0 && !reloading)
+        {
+            Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
+            fireSound.enabled = true;
+            animator.SetTrigger("Fire");
+            bulletCount++;
+            curBullet--;
+            StartCoroutine(BulletCount());
+        }
     }
 
 
@@ -167,6 +176,7 @@ public class MovingTank : MonoBehaviour
             }
             Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
             fireSound.enabled = true;
+            animator.SetTrigger("Fire");
             curBullet--;
             yield return new WaitForSeconds(bulletColldown);
             fireSound.enabled = false;
