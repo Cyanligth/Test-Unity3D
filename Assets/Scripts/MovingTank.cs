@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class MovingTank : MonoBehaviour
@@ -21,8 +22,8 @@ public class MovingTank : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletPoint;
     [SerializeField] private float bulletColldown;
-    [SerializeField] private int maxBullet;
-    [SerializeField] private int curBullet;
+    [SerializeField] public int maxBullet;
+    [SerializeField] public int curBullet;
     [SerializeField] private int reloadCool;
     private bool reloading;
 
@@ -30,6 +31,8 @@ public class MovingTank : MonoBehaviour
     [SerializeField] private AudioSource engineIdle;
     [SerializeField] private AudioSource fireSound;
     [SerializeField] private AudioSource reloadSound;
+
+    public UnityEvent OnFired;
 
     private Animator animator;
 
@@ -121,10 +124,7 @@ public class MovingTank : MonoBehaviour
             StartCoroutine(Reload());
         }
     }
-    public void Shot()
-    {
-        Fire();
-    }
+
     private int bulletCount;
     private void OnFire(InputValue input)
     {
@@ -133,7 +133,7 @@ public class MovingTank : MonoBehaviour
             StartCoroutine(Reload());
             return;
         }
-        if (bulletCount == 0 && curBullet > 0 && !reloading)
+        else
         {
             Fire();
         }
@@ -151,6 +151,8 @@ public class MovingTank : MonoBehaviour
         {
             Instantiate(bulletPrefab, bulletPoint.position, bulletPoint.rotation);
             fireSound.enabled = true;
+            OnFired?.Invoke();
+            GameManager.Data.AddShootCount(1);
             animator.SetTrigger("Fire");
             bulletCount++;
             curBullet--;
